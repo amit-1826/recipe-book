@@ -9,8 +9,4 @@ export class AppComponent {
   featureSelected: string = 'recipe';
   title = 'food-order-online';
 
-  onNavigate(feature: string) {
-    this.featureSelected = feature;
-  }
-
 }
