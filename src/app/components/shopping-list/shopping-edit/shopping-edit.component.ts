@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 
 @Component({
@@ -19,7 +19,9 @@ export class ShoppingEditComponent implements OnInit {
   onAddIngredient() {
     const name = this.nameInputRef.nativeElement.value;
     const amount = this.amountInputRef.nativeElement.value;
-    this.shoppingListService.addIngredients({ name, amount });
+    if (name && amount) {
+      this.shoppingListService.addIngredients({ name, amount });
+    }
   }
 
   onDeleteIngredient() {
