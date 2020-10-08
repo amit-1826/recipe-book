@@ -1,4 +1,6 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, OnDestroy } from '@angular/core';
+import { NgForm } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 
 @Component({
@@ -6,21 +8,34 @@ import { ShoppingListService } from 'src/app/services/shopping-list.service';
   templateUrl: './shopping-edit.component.html',
   styleUrls: ['./shopping-edit.component.css']
 })
-export class ShoppingEditComponent implements OnInit {
+export class ShoppingEditComponent implements OnInit, OnDestroy {
+  @ViewChild('manageIngredientsForm', {static: false}) manageIngredientsForm: NgForm;
+  subscription: Subscription;
+  isEditMode = false;
+  editedIndex: number;
 
-  @ViewChild('nameInputRef', { static: false }) nameInputRef: ElementRef;
-  @ViewChild('amountInputRef', { static: false }) amountInputRef: ElementRef;
   constructor(private shoppingListService: ShoppingListService) {
   }
 
   ngOnInit() {
+    this.subscription = this.shoppingListService.onIngredientEdit.subscribe((index) => {
+      this.isEditMode = true;
+      this.editedIndex = index;
+      const editedIngredient = this.shoppingListService.getIngredient(index);
+      this.manageIngredientsForm.setValue(editedIngredient);
+    })
   }
 
   onAddIngredient() {
-    const name = this.nameInputRef.nativeElement.value;
-    const amount = this.amountInputRef.nativeElement.value;
+    const name = this.manageIngredientsForm.value.name;
+    const amount = this.manageIngredientsForm.value.amount;
     if (name && amount) {
-      this.shoppingListService.addIngredients({ name, amount });
+      if (this.isEditMode) {
+        this.shoppingListService.updateIngredient(this.editedIndex, {name, amount});
+      } else {
+        this.shoppingListService.addIngredients({ name, amount }); 
+      }
+      this.onClear();
     }
   }
 
@@ -28,7 +43,11 @@ export class ShoppingEditComponent implements OnInit {
   }
 
   onClear() {
+    this.manageIngredientsForm.reset();
+  }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
 }
