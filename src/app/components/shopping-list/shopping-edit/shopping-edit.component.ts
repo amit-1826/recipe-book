@@ -26,7 +26,7 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     })
   }
 
-  onAddIngredient() {
+  onSubmit() {
     const name = this.manageIngredientsForm.value.name;
     const amount = this.manageIngredientsForm.value.amount;
     if (name && amount) {
@@ -39,11 +39,9 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  onDeleteIngredient() {
-  }
-
   onClear() {
     this.manageIngredientsForm.reset();
+    this.isEditMode = false;
   }
 
   ngOnDestroy() {

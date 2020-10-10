@@ -28,8 +28,9 @@ export class ShoppingListService {
     return this.ingredients.slice();
   }
 
-  deleteIngredient() {
-
+  deleteIngredient(index: number) {
+    this.ingredients.splice(index, 1);
+    this.ingredientAdded.next(this.ingredients.slice());
   }
 
   updateIngredient(index: number, data: Ingredients) {
@@ -38,7 +39,6 @@ export class ShoppingListService {
   }
 
   addRecipeIngredients(ingredients: any) {
-    console.log('ingredients', ingredients);
     this.ingredients.push(...ingredients);
     this.ingredientAdded.next(this.ingredients.slice());
   }
