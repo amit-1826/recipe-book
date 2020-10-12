@@ -12,6 +12,7 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   selectedRecipe: Recipe;
   subscriber: any;
+  recipeId: number;
 
   constructor(private recipeService: RecipeService,
     private route: ActivatedRoute,
@@ -19,8 +20,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.subscriber = this.route.params.subscribe((params: Params) => {
-      this.selectedRecipe = this.recipeService.getRecipeById(+params['id']);
-      console.log('selected recipe in detail: ', this.selectedRecipe);
+      this.recipeId = +params['id'];
+      this.selectedRecipe = this.recipeService.getRecipeById(this.recipeId);
     })
   }
 
@@ -30,6 +31,11 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
 
   onEditRecipe() {
     this.router.navigate(['edit'], {relativeTo: this.route});
+  }
+
+  onDeleteRecipe() {
+    this.recipeService.deleteRecipe(this.recipeId);
+    this.router.navigate(['../'], {relativeTo: this.route});
   }
 
   ngOnDestroy() {
