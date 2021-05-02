@@ -9,15 +9,17 @@ import { ShoppingListService } from './shopping-list.service';
 })
 export class RecipeService {
   recipesChanged = new Subject();
-  private recipes: Recipe[] = [
-    new Recipe(1, 'Burger', 'Burger tasty recipe', 'http://lorempixel.com/400/200/food/', [new Ingredients('Potato', 4), new Ingredients('Tomato', 6)]),
-    new Recipe(2, 'Pizza', 'Pizza very tasty recipe', 'http://lorempixel.com/400/200/food/', [new Ingredients('Aloo', 2), new Ingredients('Tamatar', 3)])
-  ];
+  private recipes: Recipe[] = [];
 
   constructor(private shoppingListService: ShoppingListService) { }
 
   getRecipes() {
     return this.recipes.slice();
+  }
+
+  setRecipes(recipes: Recipe[]) {
+    this.recipes = recipes;
+    this.recipesChanged.next(this.getRecipes());
   }
 
   addRecipeToShoppingList(ingredients: Ingredients[]) {
