@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
+import { AuthComponent } from './auth/auth.component';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { RecipeDetailComponent } from './components/recipes/recipe-detail/recipe-detail.component';
 import { RecipeEditComponent } from './components/recipes/recipe-edit/recipe-edit.component';
@@ -36,6 +37,9 @@ const routes: Routes = [
   },
   {
     path: 'not-found', component: NotFoundComponent
+  },
+  {
+    path: 'auth', component: AuthComponent
   },
   {
     path: '**', redirectTo: 'not-found', data: {mesage: 'Route not found'}

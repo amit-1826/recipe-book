@@ -10,7 +10,7 @@ export class HeaderComponent implements OnInit {
   constructor(private dataStorageService: DataStorageService) { }
 
   ngOnInit() {
-    // this.onFetchData();
+    this.onFetchData();
   }
 
   onSaveData() {
