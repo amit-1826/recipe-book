@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-md-6" (ngSubmit)="onSubmit(authForm)">
-        <form #authForm="ngForm">
+    <div class="col-md-6 col-xs-12 col-md-offset-3" (ngSubmit)="onSubmit(authForm)">
+        <form #authForm="ngForm" *ngIf="!showLoader">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" name="email" id="email" required email ngModel>
@@ -14,5 +14,8 @@
                 <button class="btn btn-info" type="button" (click)="onModeSwitch()">Switch to {{isLoginMode ? 'Sign-up' : 'Login'}}</button>
             </div>
         </form>
+        <div *ngIf="showLoader" class="text-center" style="margin-top: 3rem;">
+            <loading-spinner></loading-spinner>
+        </div>
     </div>
 </div>

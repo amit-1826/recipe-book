@@ -1,5 +1,7 @@
 import { Component } from "@angular/core";
 import { FormGroup, NgForm } from "@angular/forms";
+import { NotificationsService } from "angular2-notifications";
+import { NotificationMsgService } from "../shared/notification-message.service";
 import { AuthService } from "./auth.service";
 
 @Component({
@@ -8,7 +10,9 @@ import { AuthService } from "./auth.service";
 })
 export class AuthComponent {    
     isLoginMode = false;
-    constructor(private authService: AuthService){}
+    showLoader = false;
+    constructor(private authService: AuthService,
+        private notificationMsgService: NotificationMsgService){}
 
     onModeSwitch() {
         this.isLoginMode = !this.isLoginMode;
@@ -27,15 +31,19 @@ export class AuthComponent {
     }
 
     login() {
-
+        this.showLoader = true;
     }
 
     signup(authForm: NgForm) {
+        this.showLoader = true;
         const email = authForm.value.email;
         const password = authForm.value.password;
         this.authService.signUp(email, password).subscribe(response => {
+            this.showLoader = false;
             console.log('res', response);
         }, error => {
+            this.showLoader = false;
+            this.notificationMsgService.showErrorNotification(error.error.error.message)
             console.log('error: ', error);
         })
     }
