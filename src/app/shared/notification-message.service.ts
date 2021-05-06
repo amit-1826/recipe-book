@@ -1,3 +1,4 @@
+import { HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { NotificationsService } from "angular2-notifications";
 
@@ -10,7 +11,7 @@ export class NotificationMsgService {
 
     showErrorNotification(message: string, extraOptions?: any) {
         this.notificationsService.error(
-            message, '',  extraOptions || {
+            'Error', message,  extraOptions || {
                 timeOut: 3000,
                 showProgressBar: false,
                 pauseOnHover: false,
@@ -21,12 +22,26 @@ export class NotificationMsgService {
 
     showSuccessNotification(message: string, extraOptions?: any) {
         this.notificationsService.success(
-            message, '',  extraOptions || {
+            'Success', message,  extraOptions || {
                 timeOut: 3000,
                 showProgressBar: false,
                 pauseOnHover: false,
                 clickToClose: true
               }
         )
+    }
+
+    errorHandler(error: any) {
+        if (error) {
+            if (error.error && error.error.message) {
+                this.showErrorNotification(error.error.message);
+                return;
+            } else if (error.error && error.error.error.message) {
+                this.showErrorNotification(error.error.error.message);
+                return;
+            }
+            this.showErrorNotification(error);
+        }
+
     }
 }

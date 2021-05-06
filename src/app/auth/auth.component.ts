@@ -25,13 +25,23 @@ export class AuthComponent {
         if(!this.isLoginMode) {
             this.signup(authForm);
         } else {
-            this.login();
+            this.login(authForm);
         }
         // authForm.reset();
     }
 
-    login() {
+    login(authForm: NgForm) {
         this.showLoader = true;
+        const email = authForm.value.email;
+        const password = authForm.value.password;
+        this.authService.login(email, password).subscribe(response => {
+            this.showLoader = false;
+            this.notificationMsgService.showSuccessNotification('Login success');
+        }, error => {
+            this.showLoader = false;
+            this.notificationMsgService.errorHandler(error);
+        })
+
     }
 
     signup(authForm: NgForm) {
@@ -40,11 +50,10 @@ export class AuthComponent {
         const password = authForm.value.password;
         this.authService.signUp(email, password).subscribe(response => {
             this.showLoader = false;
-            console.log('res', response);
+            this.notificationMsgService.showSuccessNotification('Sign-up success');
         }, error => {
             this.showLoader = false;
-            this.notificationMsgService.showErrorNotification(error.error.error.message)
-            console.log('error: ', error);
+            this.notificationMsgService.errorHandler(error);
         })
     }
 }
