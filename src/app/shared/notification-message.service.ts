@@ -36,7 +36,7 @@ export class NotificationMsgService {
             if (error.error && error.error.message) {
                 this.showErrorNotification(error.error.message);
                 return;
-            } else if (error.error && error.error.error.message) {
+            } else if (error.error && error.error.error && error.error.error.message) {
                 this.showErrorNotification(error.error.error.message);
                 return;
             }

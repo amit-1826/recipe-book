@@ -1,5 +1,6 @@
 import { Component } from "@angular/core";
 import { FormGroup, NgForm } from "@angular/forms";
+import { Router } from "@angular/router";
 import { NotificationsService } from "angular2-notifications";
 import { NotificationMsgService } from "../shared/notification-message.service";
 import { AuthService } from "./auth.service";
@@ -12,7 +13,8 @@ export class AuthComponent {
     isLoginMode = false;
     showLoader = false;
     constructor(private authService: AuthService,
-        private notificationMsgService: NotificationMsgService){}
+        private notificationMsgService: NotificationMsgService,
+        private  router: Router){}
 
     onModeSwitch() {
         this.isLoginMode = !this.isLoginMode;
@@ -27,7 +29,7 @@ export class AuthComponent {
         } else {
             this.login(authForm);
         }
-        // authForm.reset();
+        authForm.reset();
     }
 
     login(authForm: NgForm) {
@@ -37,6 +39,7 @@ export class AuthComponent {
         this.authService.login(email, password).subscribe(response => {
             this.showLoader = false;
             this.notificationMsgService.showSuccessNotification('Login success');
+            this.router.navigate(['/recipes']);
         }, error => {
             this.showLoader = false;
             this.notificationMsgService.errorHandler(error);
@@ -51,6 +54,7 @@ export class AuthComponent {
         this.authService.signUp(email, password).subscribe(response => {
             this.showLoader = false;
             this.notificationMsgService.showSuccessNotification('Sign-up success');
+            this.router.navigate(['/recipes']);
         }, error => {
             this.showLoader = false;
             this.notificationMsgService.errorHandler(error);
