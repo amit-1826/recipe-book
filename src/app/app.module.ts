@@ -23,6 +23,8 @@ import { AuthComponent } from './auth/auth.component';
 import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { AuthInterceptorService } from './auth/auth-interceptor.service';
+import { AlertComponent } from './shared/alert/alert.component';
+import { ViewChildDirective } from './shared/viewchild-directive/viewchild.directive';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,12 @@ import { AuthInterceptorService } from './auth/auth-interceptor.service';
     RecipeStartComponent,
     RecipeEditComponent,
     AuthComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    AlertComponent,
+    ViewChildDirective
+  ],
+  entryComponents: [
+    AlertComponent
   ],
   imports: [
     BrowserModule,
