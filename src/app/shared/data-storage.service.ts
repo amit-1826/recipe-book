@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import {exhaustMap, map, take, tap} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
-import { Recipe } from "../components/recipes/recipe.modal";
+import { Recipe } from "../recipes/recipe.modal";
 import { RecipeService } from "../services/recipe.service";
 import { AuthService } from "../auth/auth.service";
+import { NotificationMsgService } from "./notification-message.service";
 
 @Injectable({providedIn: 'root'})
 export class DataStorageService {
@@ -12,13 +13,14 @@ export class DataStorageService {
 
     constructor(private http: HttpClient,
         private recipeService: RecipeService,
+        private notificationsService: NotificationMsgService,
         private authService: AuthService) {
     }
 
     storeRecipes() {
         const recipes = this.recipeService.getRecipes();
         this.http.put(this.recipesUrl, recipes).subscribe(response => {
-            console.log('r', recipes);
+            this.notificationsService.showSuccessNotification('Saved');
         })
     }
 
