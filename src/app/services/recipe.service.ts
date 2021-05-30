@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject } from 'rxjs';
-import { Recipe } from '../recipes/recipe.modal';
+import { Recipe } from '../modules/recipes/recipe.modal';
 import { Ingredients } from '../shared/ingredients.model';
 import { ShoppingListService } from './shopping-list.service';
 

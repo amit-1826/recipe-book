@@ -1,9 +1,9 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import {exhaustMap, map, take, tap} from 'rxjs/operators';
 import { Injectable } from "@angular/core";
-import { Recipe } from "../recipes/recipe.modal";
+import { Recipe } from "../modules/recipes/recipe.modal";
 import { RecipeService } from "../services/recipe.service";
-import { AuthService } from "../auth/auth.service";
+import { AuthService } from "../modules/auth/auth.service";
 import { NotificationMsgService } from "./notification-message.service";
 
 @Injectable({providedIn: 'root'})

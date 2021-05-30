@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { AuthService } from 'src/app/auth/auth.service';
+import { AuthService } from '../../modules/auth/auth.service';
 import { DataStorageService } from 'src/app/shared/data-storage.service';
 
 @Component({

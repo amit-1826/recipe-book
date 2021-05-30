@@ -3,9 +3,9 @@ import { FormGroup, NgForm } from "@angular/forms";
 import { Router } from "@angular/router";
 import { NotificationsService } from "angular2-notifications";
 import { Subscription } from "rxjs";
-import { AlertComponent } from "../shared/alert/alert.component";
-import { NotificationMsgService } from "../shared/notification-message.service";
-import { ViewChildDirective } from "../shared/viewchild-directive/viewchild.directive";
+import { AlertComponent } from "../../shared/alert/alert.component";
+import { NotificationMsgService } from "../../shared/notification-message.service";
+import { ViewChildDirective } from "../../shared/viewchild-directive/viewchild.directive";
 import { AuthService } from "./auth.service";
 
 @Component({
