@@ -7,31 +7,24 @@ import {HttpClientModule, HTTP_INTERCEPTORS} from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './components/header/header.component';
-import { ShoppingListComponent } from './modules/shopping-list/shopping-list.component';
-import { ShoppingEditComponent } from './modules/shopping-list/shopping-edit/shopping-edit.component';
-import { DropdownDirective } from './shared/dropdown.directive';
 import { RecipeService } from './services/recipe.service';
 import { ShoppingListService } from './services/shopping-list.service';
 import { NotFoundComponent } from './components/not-found/not-found.component';
 import { AuthComponent } from './modules/auth/auth.component';
-import { LoadingSpinnerComponent } from './shared/loading-spinner/loading-spinner.component';
 import { SimpleNotificationsModule } from 'angular2-notifications';
 import { AuthInterceptorService } from './modules/auth/auth-interceptor.service';
 import { AlertComponent } from './shared/alert/alert.component';
 import { ViewChildDirective } from './shared/viewchild-directive/viewchild.directive';
 import { RecipesModule } from './modules/recipes/recipes.module';
+import { ShoppingModule } from './modules/shopping-list/shopping.module';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
     AppComponent,
     HeaderComponent,
-    ShoppingListComponent,
-    ShoppingEditComponent,
-    DropdownDirective,
     NotFoundComponent,
     AuthComponent,
-    LoadingSpinnerComponent,
-    AlertComponent,
     ViewChildDirective
   ],
   entryComponents: [
@@ -45,7 +38,9 @@ import { RecipesModule } from './modules/recipes/recipes.module';
     HttpClientModule,
     BrowserAnimationsModule, 
     SimpleNotificationsModule.forRoot(),
-    RecipesModule
+    RecipesModule,
+    ShoppingModule,
+    SharedModule
   ],
   providers: [RecipeService, ShoppingListService, {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptorService, multi: true}],
   bootstrap: [AppComponent]
