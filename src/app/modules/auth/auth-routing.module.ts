@@ -5,11 +5,11 @@ import { AuthComponent } from "./auth.component";
 const routes: Routes = [
     {
         path: 'auth', component: AuthComponent
-      }
+    }
 ]
 
 @NgModule({
-    imports: [],
-    // exports: [RouterModule]
+    imports: [RouterModule.forChild(routes)],
+    exports: [RouterModule]
 })
 export class AuthRoutingModule {}
