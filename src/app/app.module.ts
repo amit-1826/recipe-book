@@ -28,10 +28,8 @@ import { AuthModule } from './modules/auth/auth.module';
     BrowserAnimationsModule, 
     SimpleNotificationsModule.forRoot(),
     RecipesModule,
-    ShoppingModule,
     SharedModule,
-    CoreModule,
-    AuthModule
+    CoreModule
   ],
   bootstrap: [AppComponent]
 })
