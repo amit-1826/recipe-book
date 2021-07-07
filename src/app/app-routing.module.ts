@@ -7,10 +7,13 @@ const routes: Routes = [
     path: '', redirectTo: '/recipes', pathMatch: 'full'
   },
   {
-    path: 'auth', component: AuthComponent
+    path: 'auth', loadChildren: () => import('../app/modules/auth/auth.module').then(m => m.AuthModule)
   },
   {
     path: 'recipes', loadChildren: () => import('../app/modules/recipes/recipes.module').then(m => m.RecipesModule)
+  },
+  {
+    path: 'shopping-list', loadChildren: () => import('../app/modules/shopping-list/shopping.module').then(m => m.ShoppingModule)
   }
 ];
 
