@@ -3,3 +3,4 @@ src/environments/environment.ts
 environment.ts
 environment.prod.ts
 src/environments/environment.ts
+dist/
