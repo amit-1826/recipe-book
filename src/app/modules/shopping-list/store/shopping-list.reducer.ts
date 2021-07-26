@@ -1,6 +1,5 @@
-import { Action } from '@ngrx/store';
-
 import { Ingredients } from "src/app/shared/ingredients.model";
+import * as ShoppingListAction from './shopping-list.actions';
 
 const initialState = {
     ingredients: [
@@ -9,17 +8,18 @@ const initialState = {
     ]
 }
 
-export function ShoppingListReducer(state = initialState, action: Action) {
+export function ShoppingListReducer(state = initialState, action: ShoppingListAction.AddIngradient) {
 
     switch (action.type) {
-        case 'ADD_INGREDIENT':
+        case ShoppingListAction.ADD_INGREDIENT:
             return {
                 ...state,
-                ingredients: [...state.ingredients, action]
+                ingredients: [...state.ingredients, action.payload]
             }
             break;
 
         default:
+            return state;
             break;
     }
 }

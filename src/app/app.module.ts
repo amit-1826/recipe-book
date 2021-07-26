@@ -12,6 +12,8 @@ import { ViewChildDirective } from './shared/viewchild-directive/viewchild.direc
 import { RecipesModule } from './modules/recipes/recipes.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { StoreModule } from '@ngrx/store';
+import { ShoppingListReducer } from './modules/shopping-list/store/shopping-list.reducer';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,7 @@ import { CoreModule } from './core.module';
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(),
     RecipesModule,
+    StoreModule.forRoot({ shoppingList: ShoppingListReducer }),
     SharedModule,
     CoreModule
   ],
