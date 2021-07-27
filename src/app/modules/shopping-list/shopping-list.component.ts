@@ -12,12 +12,12 @@ import { Store } from '@ngrx/store';
 export class ShoppingListComponent implements OnInit, OnDestroy {
 
   ingredients: Ingredients[] = [];
-  // ingredientSubscriber: Subscription;
+  ingredientSubscriber: Subscription;
   constructor(private shoppingListService: ShoppingListService,
     private store: Store<{ shoppingList: { ingredient: Ingredients[] } }>) { }
 
   ngOnInit() {
-    this.store.select('shoppingList').subscribe((data: any) => {
+    this.ingredientSubscriber = this.store.select('shoppingList').subscribe((data: any) => {
       this.ingredients = data.ingredients;
     })
     /* this.ingredients = this.shoppingListService.getIngredients();
@@ -25,10 +25,6 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
       this.ingredients = ingredients;
     }) */
   }
-
-  /* onAddingIngredient(ingredients: Ingredients[]) {
-    this.ingredients.push(...ingredients);
-  } */
 
   onEditIngredient(index: number) {
     this.shoppingListService.onIngredientEdit.next(index);
@@ -39,7 +35,9 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    // this.ingredientSubscriber.unsubscribe();
+    if (this.ingredientSubscriber) {
+      this.ingredientSubscriber.unsubscribe();
+    }
   }
 
 }
