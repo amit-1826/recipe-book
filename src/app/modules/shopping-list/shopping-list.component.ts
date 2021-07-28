@@ -3,6 +3,7 @@ import { Ingredients } from 'src/app/shared/ingredients.model';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Observable, Subscription } from 'rxjs';
 import { Store } from '@ngrx/store';
+import * as ShoppingListActions from '../shopping-list/store/shopping-list.actions';
 
 @Component({
   selector: 'app-shopping-list',
@@ -31,7 +32,8 @@ export class ShoppingListComponent implements OnInit, OnDestroy {
   }
 
   onDeleteIngredient(index: number) {
-    this.shoppingListService.deleteIngredient(index);
+    // this.shoppingListService.deleteIngredient(index);
+    this.store.dispatch(new ShoppingListActions.DeleteIngredient(index));
   }
 
   ngOnDestroy() {

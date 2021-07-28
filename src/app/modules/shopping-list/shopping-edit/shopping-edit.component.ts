@@ -5,6 +5,7 @@ import { Subscription } from 'rxjs';
 import { ShoppingListService } from 'src/app/services/shopping-list.service';
 import { Ingredients } from 'src/app/shared/ingredients.model';
 import { AddIngradient } from '../store/shopping-list.actions';
+import * as ShoppingListActions from '../store/shopping-list.actions';
 
 @Component({
   selector: 'app-shopping-edit',
@@ -33,11 +34,13 @@ export class ShoppingEditComponent implements OnInit, OnDestroy {
   onSubmit() {
     const name = this.manageIngredientsForm.value.name;
     const amount = this.manageIngredientsForm.value.amount;
+    const newIngredient = new Ingredients(name, amount);
     if (name && amount) {
       if (this.isEditMode) {
-        this.shoppingListService.updateIngredient(this.editedIndex, { name, amount });
+        this.store.dispatch(new ShoppingListActions.UpdateIngredient({ index: this.editedIndex, ingredient: newIngredient }))
+        // this.shoppingListService.updateIngredient(this.editedIndex, { name, amount });
       } else {
-        this.store.dispatch(new AddIngradient({ name, amount }));
+        this.store.dispatch(new ShoppingListActions.AddIngradient({ name, amount }));
         // this.shoppingListService.addIngredients({ name, amount }); 
       }
       this.onClear();
