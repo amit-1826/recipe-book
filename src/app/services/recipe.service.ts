@@ -3,8 +3,8 @@ import { Store } from '@ngrx/store';
 import { Subject } from 'rxjs';
 import { Recipe } from '../modules/recipes/recipe.modal';
 import { Ingredients } from '../shared/ingredients.model';
-import { ShoppingListService } from './shopping-list.service';
 import * as ShoppingListActions from '../modules/shopping-list/store/shopping-list.actions'
+import * as fromShopping from '../modules/shopping-list/store/shopping-list.reducer'
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class RecipeService {
   recipesChanged = new Subject();
   private recipes: Recipe[] = [];
 
-  constructor(private shoppingListService: ShoppingListService, private store: Store<{ shoppingList: { ingredient: Ingredients[] } }>) { }
+  constructor(private store: Store<fromShopping.AppState>) { }
 
   getRecipes() {
     return this.recipes.slice();
