@@ -1,7 +1,8 @@
 import { Action } from "@ngrx/store";
 
-export const LOGIN = 'LOGIN';
-export const LOGOUT = 'LOGOUT';
+// square brackets is not necessary but is recommended as larger applications can have same identifiers
+export const LOGIN = '[Auth] LOGIN';
+export const LOGOUT = '[Auth] LOGOUT';
 
 export class Login implements Action {
     readonly type = LOGIN;

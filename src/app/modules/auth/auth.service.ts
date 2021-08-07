@@ -1,10 +1,13 @@
 import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
+import { Store } from "@ngrx/store";
 import { BehaviorSubject, Subject } from "rxjs";
 import { tap } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "./user.model";
+import * as AuthActions from '../auth/store/auth.actions';
+import { AppState } from "src/app/store/appReducer";
 
 interface AuthResponseData {
     idToken: string;
@@ -17,16 +20,17 @@ interface AuthResponseData {
 
 const API_KEY = environment.authKey;
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class AuthService {
 
     // Behaviour subject allows to get data even after the event is not emitted, or 
     // it allows to get data which has been emitted previously i.e. get data on demand, even before emitting
     // while subject will get data whenever event is emitted after subscribe
-    user = new BehaviorSubject<User>(null);
+    // user = new BehaviorSubject<User>(null);
     tokenExpirationTimer: any;
 
     constructor(private http: HttpClient,
+        private store: Store<AppState>,
         private router: Router) {
     }
 
@@ -68,13 +72,15 @@ export class AuthService {
             return;
         }
         const loggedInUser = new User(userData.email, userData.userId, userData._token, new Date(userData._expirationDate));
-        this.user.next(loggedInUser);
+        // this.user.next(loggedInUser);
+        this.store.dispatch(new AuthActions.Login({ email: userData.email, userId: userData.userId, token: userData._token, expirationDate: new Date(userData._expirationDate) }));
         const expirationDuration = new Date(userData._expirationDate).getTime() - new Date().getTime();
         this.autoLogout(expirationDuration);
     }
 
     logout() {
-        this.user.next(null);
+        // this.user.next(null);
+        this.store.dispatch(new AuthActions.Logout());
         this.router.navigate(['/auth']);
         localStorage.removeItem('userData');
         if (this.tokenExpirationTimer) {
@@ -82,11 +88,12 @@ export class AuthService {
         }
         this.tokenExpirationTimer = null;
     }
-    
+
     private handleAuthentication(resData: AuthResponseData) {
         const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
         const user = new User(resData.email, resData.localId, resData.idToken, expirationDate);
-        this.user.next(user);
+        // this.user.next(user);
+        this.store.dispatch(new AuthActions.Login({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate }));
         this.autoLogout(+resData.expiresIn * 1000);
         localStorage.setItem('userData', JSON.stringify(user));
     }
