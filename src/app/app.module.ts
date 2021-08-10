@@ -13,7 +13,9 @@ import { RecipesModule } from './modules/recipes/recipes.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects'
 import { appReducer } from './store/appReducer';
+import { AuthEffect } from './modules/auth/store/auth.effects';
 
 @NgModule({
   declarations: [
@@ -29,6 +31,7 @@ import { appReducer } from './store/appReducer';
     SimpleNotificationsModule.forRoot(),
     RecipesModule,
     StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([AuthEffect]),
     SharedModule,
     CoreModule
   ],
