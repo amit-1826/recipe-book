@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.2.8",
     "@angular/platform-server": "~8.2.8",
     "@angular/router": "~8.2.8",
-    "@ngrx/effects": "^12.3.0",
+    "@ngrx/effects": "^8.6.1",
     "@ngrx/store": "^8.6.1",
     "@nguniversal/express-engine": "^8.2.6",
     "@nguniversal/module-map-ngfactory-loader": "v8.2.6",
