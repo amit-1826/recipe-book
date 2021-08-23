@@ -19,6 +19,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     isLoginMode = false;
     showLoader = false;
     private alertSubscription: Subscription;
+    private storeSubcription: Subscription;
 
     @ViewChild(ViewChildDirective, { static: false }) viewChildRef: ViewChildDirective
     constructor(private authService: AuthService,
@@ -32,7 +33,7 @@ export class AuthComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.store.select('auth').subscribe(authState => {
+        this.storeSubcription = this.store.select('auth').subscribe(authState => {
             console.log('after login in auth component', authState);
 
             this.showLoader = authState.loading;
@@ -103,6 +104,9 @@ export class AuthComponent implements OnInit, OnDestroy {
     ngOnDestroy() {
         if (this.alertSubscription) {
             this.alertSubscription.unsubscribe()
+        }
+        if (this.storeSubcription) {
+            this.storeSubcription.unsubscribe();
         }
     }
 }

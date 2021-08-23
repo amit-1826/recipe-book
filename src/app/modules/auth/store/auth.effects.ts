@@ -20,6 +20,14 @@ interface AuthResponseData {
 
 const API_KEY = environment.authKey;
 
+const handleAuthentication = (resData: any) => {
+    const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
+    return new AuthActions.AuthenticateSuccess({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate })
+};
+
+const handleError = (error) => {
+    return of(new AuthActions.AuthError(error));
+};
 
 @Injectable()
 export class AuthEffect {
@@ -32,17 +40,16 @@ export class AuthEffect {
                 password: authData.payload.password,
                 returnSecureToken: true
             }).pipe(map((resData) => {
-                const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-                return new AuthActions.Login({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate })
+                return handleAuthentication(resData);
             }), catchError((error: any) => {
-                return of(new AuthActions.LoginFail(error));
+                return handleError(error);
             }));
         })
     )
 
     @Effect({ dispatch: false })
-    loginSuccess = this.actions$.pipe(
-        ofType(AuthActions.LOGIN),
+    authSuccess = this.actions$.pipe(
+        ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap((data) => {
             this.router.navigate(['/recipes']);
         })
@@ -57,22 +64,10 @@ export class AuthEffect {
                 password: signUpData.payload.password,
                 returnSecureToken: true
             }).pipe((map((resData) => {
-                console.log('after sign up success', resData);
-                const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
-                return new AuthActions.SignUpSuccess({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate })
+                return handleAuthentication(resData);
             })), catchError((error: any) => {
-                console.log('error in signup: ', error);
-                return of(new AuthActions.SignUpFail(error));
+                return handleError(error);
             }));
-        })
-    )
-
-    @Effect({ dispatch: false })
-    signUpSuccess = this.actions$.pipe(
-        ofType(AuthActions.SIGN_UP_SUCCESS),
-        tap((data) => {
-            console.log('after sign up success: ', data);
-            this.router.navigate(['/recipes']);
         })
     )
 

@@ -1,15 +1,17 @@
 import { Action } from "@ngrx/store";
 
 // square brackets is not necessary but is recommended as larger applications can have same identifiers
-export const LOGIN = '[Auth] LOGIN';
+// export const LOGIN = '[Auth] LOGIN';
 export const LOGOUT = '[Auth] LOGOUT';
 export const LOGIN_START = '[Auth] LOGIN_START';
-export const LOGIN_FAIL = '[Auth] LOGIN_FAIL';
-export const SIGN_UP_FAIL = '[Auth] SIGN_UP_FAIL';
+/* export const LOGIN_FAIL = '[Auth] LOGIN_FAIL';
+export const SIGN_UP_FAIL = '[Auth] SIGN_UP_FAIL'; */
 export const SIGN_UP_START = '[Auth] SIGN_UP_START';
-export const SIGN_UP_SUCCESS = '[Auth] SIGN_UP_SUCCESS';
+// export const SIGN_UP_SUCCESS = '[Auth] SIGN_UP_SUCCESS';
+export const AUTHENTICATE_SUCCESS = '[Auth] AUTHENTICATE_SUCCESS';
+export const AUTHENTICATE_ERROR = '[Auth] AUTHENTICATE_ERROR';
 
-export class Login implements Action {
+/* export class Login implements Action {
     readonly type = LOGIN;
     constructor(public payload: {
         email: string,
@@ -17,7 +19,7 @@ export class Login implements Action {
         token: string,
         expirationDate: Date
     }) { }
-}
+} */
 
 export class Logout implements Action {
     readonly type = LOGOUT;
@@ -31,10 +33,10 @@ export class LoginStart implements Action {
     }) { }
 }
 
-export class LoginFail implements Action {
+/* export class LoginFail implements Action {
     readonly type = LOGIN_FAIL;
     constructor(public payLoad: string) { }
-}
+} */
 
 export class SignUpStart implements Action {
     readonly type = SIGN_UP_START;
@@ -44,8 +46,18 @@ export class SignUpStart implements Action {
     }) { }
 }
 
-export class SignUpSuccess implements Action {
+/* export class SignUpSuccess implements Action {
     readonly type = SIGN_UP_SUCCESS;
+    constructor(public payload: {
+        email: string,
+        userId: string,
+        token: string,
+        expirationDate: Date
+    }) { }
+} */
+
+export class AuthenticateSuccess implements Action {
+    readonly type = AUTHENTICATE_SUCCESS;
     constructor(public payload: {
         email: string,
         userId: string,
@@ -54,9 +66,13 @@ export class SignUpSuccess implements Action {
     }) { }
 }
 
-export class SignUpFail implements Action {
-    readonly type = SIGN_UP_FAIL;
+export class AuthError implements Action {
+    readonly type = AUTHENTICATE_ERROR;
     constructor(public payLoad: string) { }
 }
 
-export type AuthActions = Login | Logout | LoginFail | LoginStart | SignUpStart | SignUpSuccess | SignUpFail;
+/* export class SignUpFail implements Action {
+    
+} */
+
+export type AuthActions = AuthenticateSuccess | Logout | LoginStart | SignUpStart | AuthError;
