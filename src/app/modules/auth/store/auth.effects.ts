@@ -44,9 +44,37 @@ export class AuthEffect {
     loginSuccess = this.actions$.pipe(
         ofType(AuthActions.LOGIN),
         tap((data) => {
-
             this.router.navigate(['/recipes']);
         })
     )
+
+    @Effect()
+    signUpStart = this.actions$.pipe(
+        ofType(AuthActions.SIGN_UP_START),
+        switchMap((signUpData: AuthActions.SignUpStart) => {
+            return this.http.post<AuthResponseData>('https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=' + API_KEY, {
+                email: signUpData.payload.email,
+                password: signUpData.payload.password,
+                returnSecureToken: true
+            }).pipe((map((resData) => {
+                console.log('after sign up success', resData);
+                const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
+                return new AuthActions.SignUpSuccess({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate })
+            })), catchError((error: any) => {
+                console.log('error in signup: ', error);
+                return of(new AuthActions.SignUpFail(error));
+            }));
+        })
+    )
+
+    @Effect({ dispatch: false })
+    signUpSuccess = this.actions$.pipe(
+        ofType(AuthActions.SIGN_UP_SUCCESS),
+        tap((data) => {
+            console.log('after sign up success: ', data);
+            this.router.navigate(['/recipes']);
+        })
+    )
+
     constructor(private actions$: Actions, private http: HttpClient, private store: Store<AppState>, private router: Router) { }
 }

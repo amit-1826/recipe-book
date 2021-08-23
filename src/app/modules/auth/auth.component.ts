@@ -75,15 +75,16 @@ export class AuthComponent implements OnInit, OnDestroy {
         this.showLoader = true;
         const email = authForm.value.email;
         const password = authForm.value.password;
-        this.authService.signUp(email, password).subscribe(response => {
-            this.showLoader = false;
-            this.notificationMsgService.showSuccessNotification('Sign-up success');
-            this.router.navigate(['/recipes']);
-        }, error => {
-            this.showLoader = false;
-            this.notificationMsgService.errorHandler(error);
-            this.handleError('Error in sign up');
-        })
+        this.store.dispatch(new AuthActions.SignUpStart({ email, password }));
+        /*  this.authService.signUp(email, password).subscribe(response => {
+             this.showLoader = false;
+             this.notificationMsgService.showSuccessNotification('Sign-up success');
+             this.router.navigate(['/recipes']);
+         }, error => {
+             this.showLoader = false;
+             this.notificationMsgService.errorHandler(error);
+             this.handleError('Error in sign up');
+         }) */
     }
 
     private handleError(message: string) {
