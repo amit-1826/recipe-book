@@ -10,6 +10,7 @@ export const SIGN_UP_START = '[Auth] SIGN_UP_START';
 // export const SIGN_UP_SUCCESS = '[Auth] SIGN_UP_SUCCESS';
 export const AUTHENTICATE_SUCCESS = '[Auth] AUTHENTICATE_SUCCESS';
 export const AUTHENTICATE_ERROR = '[Auth] AUTHENTICATE_ERROR';
+export const AUTO_LOGIN = '[Auth] AUTO_LOGIN';
 
 /* export class Login implements Action {
     readonly type = LOGIN;
@@ -71,8 +72,8 @@ export class AuthError implements Action {
     constructor(public payLoad: string) { }
 }
 
-/* export class SignUpFail implements Action {
-    
-} */
+export class AutoLogin implements Action {
+    readonly type = AUTO_LOGIN;
+}
 
-export type AuthActions = AuthenticateSuccess | Logout | LoginStart | SignUpStart | AuthError;
+export type AuthActions = AuthenticateSuccess | Logout | LoginStart | SignUpStart | AuthError | AutoLogin;

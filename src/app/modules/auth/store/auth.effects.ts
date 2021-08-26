@@ -7,7 +7,9 @@ import { of } from 'rxjs';
 import { catchError, map, switchMap, tap } from 'rxjs/operators';
 import { AppState } from 'src/app/store/appReducer';
 import { environment } from 'src/environments/environment';
+import { AuthService } from '../auth.service';
 import * as AuthActions from '../store/auth.actions';
+import { User } from '../user.model';
 
 interface AuthResponseData {
     idToken: string;
@@ -22,6 +24,8 @@ const API_KEY = environment.authKey;
 
 const handleAuthentication = (resData: any) => {
     const expirationDate = new Date(new Date().getTime() + +resData.expiresIn * 1000);
+    const user = new User(resData.email, resData.localId, resData.idToken, expirationDate);
+    localStorage.setItem('userData', JSON.stringify(user));
     return new AuthActions.AuthenticateSuccess({ email: resData.email, userId: resData.localId, token: resData.idToken, expirationDate: expirationDate })
 };
 
@@ -39,19 +43,52 @@ export class AuthEffect {
                 email: authData.payload.email,
                 password: authData.payload.password,
                 returnSecureToken: true
-            }).pipe(map((resData) => {
-                return handleAuthentication(resData);
-            }), catchError((error: any) => {
-                return handleError(error);
-            }));
+            }).pipe(
+                tap((resData) => {
+                    this.authService.setExpirationTImer(+resData.expiresIn * 1000);
+                }),
+                map((resData) => {
+                    return handleAuthentication(resData);
+                }), catchError((error: any) => {
+                    return handleError(error);
+                }));
         })
     )
 
     @Effect({ dispatch: false })
-    authSuccess = this.actions$.pipe(
+    authRedirect = this.actions$.pipe(
         ofType(AuthActions.AUTHENTICATE_SUCCESS),
         tap((data) => {
-            this.router.navigate(['/recipes']);
+            this.router.navigate(['/']);
+        })
+    )
+
+    @Effect({ dispatch: false })
+    authLogout = this.actions$.pipe(
+        ofType(AuthActions.LOGOUT),
+        tap((data) => {
+            this.authService.clearTimer();
+            localStorage.removeItem('userData');
+            this.router.navigate(['/auth']);
+        })
+    )
+
+    @Effect()
+    autoLogin = this.actions$.pipe(
+        ofType(AuthActions.AUTO_LOGIN),
+        map((data) => {
+            const userData: {
+                email: string,
+                userId: string,
+                _token: string,
+                _expirationDate: string
+            } = JSON.parse(localStorage.getItem('userData'));
+            if (!userData) {
+                return { type: 'DUMMY' };
+            }
+            const expirationDuration = new Date(userData._expirationDate).getTime() - new Date().getTime();
+            this.authService.setExpirationTImer(expirationDuration);
+            return new AuthActions.AuthenticateSuccess({ email: userData.email, userId: userData.userId, token: userData._token, expirationDate: new Date(userData._expirationDate) });
         })
     )
 
@@ -63,13 +100,17 @@ export class AuthEffect {
                 email: signUpData.payload.email,
                 password: signUpData.payload.password,
                 returnSecureToken: true
-            }).pipe((map((resData) => {
-                return handleAuthentication(resData);
-            })), catchError((error: any) => {
-                return handleError(error);
-            }));
+            }).pipe(
+                tap((resData) => {
+                    this.authService.setExpirationTImer(+resData.expiresIn * 1000);
+                }),
+                map((resData) => {
+                    return handleAuthentication(resData);
+                }), catchError((error: any) => {
+                    return handleError(error);
+                }));
         })
     )
 
-    constructor(private actions$: Actions, private http: HttpClient, private store: Store<AppState>, private router: Router) { }
+    constructor(private actions$: Actions, private http: HttpClient, private store: Store<AppState>, private router: Router, private authService: AuthService) { }
 }
