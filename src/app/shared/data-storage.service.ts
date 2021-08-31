@@ -1,20 +1,22 @@
-import { HttpClient, HttpParams } from "@angular/common/http";
-import {exhaustMap, map, take, tap} from 'rxjs/operators';
+import { HttpClient } from "@angular/common/http";
+import { map, tap } from 'rxjs/operators';
 import { Injectable } from "@angular/core";
 import { Recipe } from "../modules/recipes/recipe.modal";
 import { RecipeService } from "../services/recipe.service";
-import { AuthService } from "../modules/auth/auth.service";
 import { NotificationMsgService } from "./notification-message.service";
+import { Store } from "@ngrx/store";
+import * as fromApp from '../store/appReducer';
+import * as RecipeActions from '../modules/recipes/store/recipes.actions';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class DataStorageService {
 
     recipesUrl: string = 'https://recipe-book-e299e-default-rtdb.firebaseio.com/recipes.json';
 
     constructor(private http: HttpClient,
         private recipeService: RecipeService,
-        private notificationsService: NotificationMsgService,
-        private authService: AuthService) {
+        private store: Store<fromApp.AppState>,
+        private notificationsService: NotificationMsgService) {
     }
 
     storeRecipes() {
@@ -37,12 +39,12 @@ export class DataStorageService {
         return this.http.get<Recipe[]>(this.recipesUrl).pipe(
             map(recipes => {
                 return recipes.map(recipe => {
-                    return {...recipe, ingredients: recipe.ingredients ? recipe.ingredients : []}
+                    return { ...recipe, ingredients: recipe.ingredients ? recipe.ingredients : [] }
                 });
-            }), 
+            }),
             tap(recipes => {
-                console.log('recipes:', recipes);
-                this.recipeService.setRecipes(recipes);
+                // this.recipeService.setRecipes(recipes);
+                this.store.dispatch(new RecipeActions.SetRecipe(recipes));
             })
         );
     }
