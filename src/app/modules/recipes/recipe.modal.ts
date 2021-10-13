@@ -1,7 +1,7 @@
 import { Ingredients } from 'src/app/shared/ingredients.model';
 
 export class Recipe {
-    public id: number;
+    public id?: number;
     public name: string;
     public description: string;
     public imagePath: string;

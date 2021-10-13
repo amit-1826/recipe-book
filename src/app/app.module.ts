@@ -12,6 +12,14 @@ import { ViewChildDirective } from './shared/viewchild-directive/viewchild.direc
 import { RecipesModule } from './modules/recipes/recipes.module';
 import { SharedModule } from './shared/shared.module';
 import { CoreModule } from './core.module';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects'
+import { appReducer } from './store/appReducer';
+import { AuthEffect } from './modules/auth/store/auth.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environment';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { RecipesEffect } from './modules/recipes/store/recipes.effects';
 
 @NgModule({
   declarations: [
@@ -26,6 +34,10 @@ import { CoreModule } from './core.module';
     BrowserAnimationsModule,
     SimpleNotificationsModule.forRoot(),
     RecipesModule,
+    StoreModule.forRoot(appReducer),
+    EffectsModule.forRoot([AuthEffect, RecipesEffect]),
+    StoreDevtoolsModule.instrument({ logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot(),
     SharedModule,
     CoreModule
   ],

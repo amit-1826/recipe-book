@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Recipe } from './recipe.modal';
 
 @Component({
   selector: 'app-recipes',
