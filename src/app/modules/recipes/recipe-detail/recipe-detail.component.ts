@@ -5,6 +5,7 @@ import { ActivatedRoute, Params, Router } from '@angular/router';
 import { map, switchMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import * as fromApp from '../../../store/appReducer';
+import * as RecipeAction from '../store/recipes.actions';
 
 @Component({
   selector: 'app-recipe-detail',
@@ -29,9 +30,9 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
       this.recipeId = id;
       return this.store.select('recipes');
     }), map((recipeState) => {
+      console.log('recipeState: ', recipeState);
       return recipeState.recipes.find((recipe) => recipe.id == this.recipeId);
     })).subscribe((recipe) => {
-      console.log('selected recipe: ', recipe);
       this.selectedRecipe = recipe;
     })
     /* this.subscriber = this.route.params.subscribe((params: Params) => {
@@ -49,7 +50,8 @@ export class RecipeDetailComponent implements OnInit, OnDestroy {
   }
 
   onDeleteRecipe() {
-    this.recipeService.deleteRecipe(this.recipeId);
+    // this.recipeService.deleteRecipe(this.recipeId);
+    this.store.dispatch(new RecipeAction.DeleteRecipe(this.recipeId));
     this.router.navigate(['../'], { relativeTo: this.route });
   }
 
