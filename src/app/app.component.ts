@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    // adding this as when running via server, some browser apis like localstorage, queryselector are not available
+    // so we need to ignore these while running via server
     if (isPlatformBrowser(this.platFormId)) {
       this.store.dispatch(new AuthActions.AutoLogin());
     }
